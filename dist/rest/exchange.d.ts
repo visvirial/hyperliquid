@@ -10,7 +10,7 @@ export declare class ExchangeAPI {
     private symbolConversion;
     constructor(baseURL: string, privateKey: string, info: InfoAPI, rateLimiter: RateLimiter, symbolConversion: SymbolConversion);
     private getAssetIndex;
-    placeOrder(orderRequest: OrderRequest): Promise<any>;
+    placeOrder(orderRequest: OrderRequest, vaultAddress?: string | null): Promise<any>;
     cancelOrder(cancelRequests: CancelOrderRequest | CancelOrderRequest[]): Promise<CancelOrderResponse>;
     cancelOrderByCloid(symbol: string, cloid: string): Promise<any>;
     modifyOrder(oid: number, orderRequest: OrderRequest): Promise<any>;

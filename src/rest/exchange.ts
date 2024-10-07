@@ -49,16 +49,16 @@ export class ExchangeAPI {
       return index;
   }
 
-  async placeOrder(orderRequest: OrderRequest): Promise<any> {
+  async placeOrder(orderRequest: OrderRequest, vaultAddress: string | null = null): Promise<any> {
     try {
         const assetIndex = await this.getAssetIndex(orderRequest.coin);
 
         const orderWire = orderRequestToOrderWire(orderRequest, assetIndex);
         const action = orderWiresToOrderAction([orderWire]);
         const nonce = Date.now();
-        const signature = await signL1Action(this.wallet, action, null, nonce);
+        const signature = await signL1Action(this.wallet, action, vaultAddress, nonce);
 
-        const payload = { action, nonce, signature };
+        const payload = { action, nonce, signature, vaultAddress };
         return this.httpApi.makeRequest(payload, 1);
     } catch (error) {
         throw error;
