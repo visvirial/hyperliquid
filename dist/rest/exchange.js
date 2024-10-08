@@ -20,7 +20,7 @@ class ExchangeAPI {
         }
         return index;
     }
-    async placeOrder(orderRequest, vaultAddress = null) {
+    async getPlaceOrderPayload(orderRequest, vaultAddress = null) {
         try {
             const assetIndex = await this.getAssetIndex(orderRequest.coin);
             const orderWire = (0, signing_1.orderRequestToOrderWire)(orderRequest, assetIndex);
@@ -28,6 +28,15 @@ class ExchangeAPI {
             const nonce = Date.now();
             const signature = await (0, signing_1.signL1Action)(this.wallet, action, vaultAddress, nonce);
             const payload = { action, nonce, signature, vaultAddress };
+            return payload;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async placeOrder(orderRequest, vaultAddress = null) {
+        try {
+            const payload = await this.getPlaceOrderPayload(orderRequest, vaultAddress);
             return this.httpApi.makeRequest(payload, 1);
         }
         catch (error) {
